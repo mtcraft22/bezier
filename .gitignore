@@ -1,5 +1,5 @@
-./build/
-./.idea/
-./.cache/
+build/
+.*/
+*cmake*/
 *.cmake
 .clangd

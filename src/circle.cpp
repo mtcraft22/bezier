@@ -1,0 +1,64 @@
+#include <SDL2/SDL.h>
+#include <circle.hpp>
+#include <cmath>
+#include <cstdlib>
+#include <Node.hpp>
+#include <iostream>
+#include <ostream>
+#include <stdexcept>
+#include <vector>
+
+
+mt_cad::Circle::Circle(std::vector<Node> nodes){
+    this->max_nodes = 2;
+    if (nodes.size()>=this->max_nodes){
+        this->nodes = nodes;
+    }else{
+        throw std::length_error("Too many nodes for a circle");
+    }
+}
+std::vector<mt_cad::Node> mt_cad::Circle::get_points() {
+	return this->nodes;
+}
+void mt_cad::Circle::set_points(std::vector<Node> nodes) {
+	if (nodes.size()>=this->max_nodes){
+        this->nodes = nodes;
+    }else{
+        throw std::length_error("Too many nodes for a circle");
+    }
+}
+void mt_cad::Circle::draw(SDL_Renderer *ctx)
+{
+    int x1,y1,x2,y2 = 0;
+
+    this->nodes.at(0).get_coords(x1,y1);
+    this->nodes.at(1).get_coords(x2,y2);
+    this->nodes.at(1).set_canmove(XY);
+    this->nodes.at(1).set_coords(x2, y1);
+    this->nodes.at(1).set_canmove(X);
+    int radius = abs(x1 - x2);
+    SDL_Point prev = {0,0};
+    
+    prev.x = cos(0)*radius+x1;
+    prev.y = sin(0)*radius+y1;
+    for (int i = 1 ; i<= 360; i++){
+      
+        SDL_RenderDrawLine(ctx, prev.x, prev.y, cos(((float)i/180)*3.1416)*radius+x1,sin(((float)i/180)*3.1416)*radius+y1);
+
+        prev.x = cos(((float)i/180)*3.1416)*radius+x1;
+        prev.y = sin(((float)i/180)*3.1416)*radius+y1;
+    }
+   
+}
+
+bool mt_cad::Circle::hover(int x , int y){
+    int x1,y1,x2,y2 = 0;
+    this->nodes.at(0).get_coords(x1,y1);
+    this->nodes.at(1).get_coords(x2,y2);
+
+    int radius = abs(x1 - x2);
+    int dist =  abs(x-x1) * abs(x-x1) +  abs(y-y1) * abs(y-y1);
+    return dist <= (radius*radius);
+};
+
+

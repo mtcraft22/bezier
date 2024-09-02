@@ -1,0 +1,68 @@
+#include "Node.hpp"
+#include "Shape.hpp"
+#include <SDL2/SDL_rect.h>
+#include <Rectangle.hpp>
+#include <SDL2/SDL_render.h>
+#include <cstdlib>
+#include <iostream>
+#include <ostream>
+#include <stdexcept>
+#include <vector>
+
+mt_cad::Rectangle::Rectangle(std::vector<mt_cad::Node> nodes){
+    this->max_nodes = 2;
+    
+    if (nodes.size() == 2){
+        int x2,y2,x1,y1;
+        nodes.at(0).get_coords(x1,y1);
+	    nodes.at(1).get_coords(x2,y2);
+        mt_cad::Node Central = mt_cad::Node(x1 + ((x2-x1)/2) ,y1 + ((y2-y1)/2),XY);
+        this->nodes = {Central , nodes.at(0), nodes.at(1)};
+    }else {
+        throw std::length_error("Too much nodes for a rectangle shape");
+    }
+    
+    
+}
+void mt_cad::Rectangle::draw(SDL_Renderer * ctx){
+    int x2,y2,x1,y1;
+    this->nodes.at(1).get_coords(x1,y1);
+	this->nodes.at(2).get_coords(x2,y2);
+    SDL_Rect rect = {x1,y1,x2-x1,y2-y1};
+    SDL_RenderDrawRect(ctx, &rect);
+    
+}
+bool mt_cad::Rectangle::hover(int x, int y){
+    int x2,y2,x1,y1;
+    this->nodes.at(1).get_coords(x1,y1);
+	this->nodes.at(2).get_coords(x2,y2);
+    SDL_Rect rect = {x1,y1,x2-x1,y2-y1};
+
+    if (x2 < x1){
+        int x3 = x1;
+        x1 = x2;
+        x2 = x3;
+    }
+
+    if (y2 < y1){
+        int y3 = y1;
+        y1 = y2;
+        y2 = y3;
+    }
+    return (x > x1 && x < x2) && (y > y1 && y < y2) ;
+    
+}
+void mt_cad::Rectangle::set_points(std::vector<mt_cad::Node> nodes){
+     if (nodes.size() >= 2){
+        int x2,y2,x1,y1;
+        nodes.at(1).get_coords(x1,y1);
+	    nodes.at(2).get_coords(x2,y2);
+        mt_cad::Node Central = mt_cad::Node(x1 + ((x2-x1)/2) ,y1 + ((y2-y1)/2),XY);
+        this->nodes = {Central , nodes.at(1), nodes.at(2)};
+    }else {
+        throw std::length_error("Too much nodes for a rectangle shape");
+    }
+}
+std::vector<mt_cad::Node> mt_cad::Rectangle::get_points(){
+    return this->nodes;
+}
