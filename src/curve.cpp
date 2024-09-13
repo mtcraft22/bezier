@@ -41,10 +41,15 @@ void mt_cad::Curve::draw (SDL_Renderer * ctx){
 	this->nodes.at(1).get_coords(x0,y0);
 	this->nodes.at(2).get_coords(x1,y1);
 	this->nodes.at(3).get_coords(x2,y2);
+    float px = ((1-0)*(1-0))*x0 + 2*(1-0)*0*x1 + (0*0)*x2;
+    float py = ((1-0)*(1-0))*y0 + 2*(1-0)*0*y1 + (0*0)*y2;
     for (float i = 0; i < 1.001; i+=0.001){
         float x = ((1-i)*(1-i))*x0 + 2*(1-i)*i*x1 + (i*i)*x2;
         float y = ((1-i)*(1-i))*y0 + 2*(1-i)*i*y1 + (i*i)*y2;
-        SDL_RenderDrawPointF(ctx, x, y);
+        SDL_RenderDrawLineF(ctx, px, py, x, y);
+        px = x;
+        py = y;
+
     }
 }
 bool mt_cad::Curve::triPoint(float x1, float y1, float x2, float y2, float x3, float y3,float px, float py) {

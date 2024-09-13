@@ -22,7 +22,7 @@ std::vector<mt_cad::Node> mt_cad::Circle::get_points() {
 }
 void mt_cad::Circle::set_points(std::vector<Node> nodes) {
 	if (nodes.size()>=this->max_nodes){
-        this->nodes = nodes;
+        this->nodes = {nodes.at(0),nodes.at(1)};
     }else{
         throw std::length_error("Too many nodes for a circle");
     }
