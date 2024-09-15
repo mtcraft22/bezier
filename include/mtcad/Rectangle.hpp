@@ -12,7 +12,7 @@
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
 #pragma once
-#include <Shape.hpp>
+#include <mtcad/Shape.hpp>
 #include <vector>
 namespace mt_cad {
     class Node;

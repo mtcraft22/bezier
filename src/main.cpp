@@ -11,18 +11,9 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
-#include "Node.hpp"
-#include "Rectangle.hpp"
-#include "Shape.hpp"
-#include "Triangle.hpp"
-#include "circle.hpp"
-#include "curve.hpp"
+#include <mtcad/mtcad.hpp>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_pixels.h>
-#include <SDL2/SDL_rect.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_surface.h>
-#include <SDL2/SDL_video.h>
+
 #include <cmath>
 #include <cstddef>
 #include <iostream>

@@ -11,19 +11,20 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
-#include "Shape.hpp"
-#include <SDL2/SDL.h>
-#include <Node.hpp>
-#include <vector>
 #pragma once
-namespace mt_cad{
-	class Circle: public Shape{
-		public:
-			Circle(std::vector<mt_cad::Node> nodes);
-			void draw(SDL_Renderer * ctx) ;
+#include <mtcad/Node.hpp>
+#include <mtcad/Shape.hpp>
+#include <vector>
+namespace mt_cad {
+    class Triangle: public Shape{
+        public:
+            Triangle (std::vector<mt_cad::Node> points );
+            void draw(SDL_Renderer * ctx) ;
             bool hover(int x , int y) ;
             std::vector<mt_cad::Node> get_points() ;
             void set_points(std::vector<mt_cad::Node> nodes) ;
-	};
+        private:
+            bool triPoint(float x1, float y1, float x2, float y2, float x3, float y3,
+            float px, float py);
+    };
 }
-
