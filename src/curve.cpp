@@ -41,9 +41,7 @@ void mt_cad::Curve::set_points(std::vector<mt_cad::Node> nodes){
         nodes.at(1).get_coords(x0,y0);
         nodes.at(2).get_coords(x1,y1);
         nodes.at(3).get_coords(x2,y2);
-       
-    
-          mt_cad::Node central = mt_cad::Node(x0,y0-20 ,XY);
+        mt_cad::Node central = mt_cad::Node(x0,y0-20 ,XY);
         this->nodes = {central,nodes.at(1),nodes.at(2),nodes.at(3)};
     }else{
         throw std::length_error("Too many nodes for a curve");
@@ -56,7 +54,7 @@ void mt_cad::Curve::draw (SDL_Renderer * ctx){
 	this->nodes.at(3).get_coords(x2,y2);
     float px = ((1-0)*(1-0))*x0 + 2*(1-0)*0*x1 + (0*0)*x2;
     float py = ((1-0)*(1-0))*y0 + 2*(1-0)*0*y1 + (0*0)*y2;
-    for (float i = 0; i < 1.001; i+=0.001){
+    for (float i = 0; i < 1.1; i+=0.1){
         float x = ((1-i)*(1-i))*x0 + 2*(1-i)*i*x1 + (i*i)*x2;
         float y = ((1-i)*(1-i))*y0 + 2*(1-i)*i*y1 + (i*i)*y2;
         SDL_RenderDrawLineF(ctx, px, py, x, y);

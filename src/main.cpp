@@ -90,13 +90,13 @@ int main(int argc, char **argv){
         }
         SDL_UnlockTexture(gui);
    
-    std::vector<mt_cad::Node> nodes3 = {{50,60+sh/4,XY},{100,60+sh/4,XY}};
+    std::vector<mt_cad::Node> nodes3 = {{50,60+ideal,XY},{100,60+ideal,XY}};
     mt_cad::Circle tri3 = mt_cad::Circle(  nodes3  );
-    std::vector<mt_cad::Node> nodes4 = {{400,400+sh/4,XY},{440,440+sh/4,XY}};
+    std::vector<mt_cad::Node> nodes4 = {{400,400+ideal,XY},{440,440+ideal,XY}};
     mt_cad::Rectangle tri4 = mt_cad::Rectangle(  nodes4  );
-    std::vector<mt_cad::Node> nodes5 = {{500,500+sh/4,XY},{540,500+sh/4,XY},{500,540+sh/4,XY}};
+    std::vector<mt_cad::Node> nodes5 = {{500,500+ideal,XY},{540,500+ideal,XY},{500,540+ideal,XY}};
     mt_cad::Triangle tri5 = mt_cad::Triangle(  nodes5  );
-    std::vector<mt_cad::Node> nodes6 = {{100,100+sh/4,XY},{140,100+sh/4,XY},{100,140+sh/4,XY}};
+    std::vector<mt_cad::Node> nodes6 = {{100,100+ideal,XY},{140,100+ideal,XY},{100,140+ideal,XY}};
     mt_cad::Curve tri6 = mt_cad::Curve(  nodes6  );
     //mt_cad::Curve Curv = mt_cad::Curve(  nodes  );
     int end,start = SDL_GetTicks(); 
@@ -166,21 +166,27 @@ int main(int argc, char **argv){
                         
                         psw = sw;
                         psh = sh;
-                       
+                        int pideal = ideal;
                         SDL_GetWindowSize(window, &sw, &sh);
                         SDL_DestroyTexture(canvas);
                         canvas = SDL_CreateTexture(ctx, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, sw, sh);
 
                         render_grid(sw, sh, canvas);
+                        canvas_y_coord = sh/4;
+                        for (int i= 0; i <= gridsize;i++){
+                            if ((canvas_y_coord + i) % gridsize == 0){
+                                ideal = canvas_y_coord + i;
+                            }
+                        }
                         for ( int i = 0; i < shapes.size(); i++ ){
-                           for (int i2 = 1; i2< shapes.at(i)->get_points().size(); i2++){
+                           for (int i2 = 0; i2< shapes.at(i)->get_points().size(); i2++){
                                     std::vector<mt_cad::Node> nodes = shapes.at(i)->get_points();
                                     int x,y ;
                                     Restictions res =  nodes.at(i2).get_canmove();
                                     nodes.at(i2).set_canmove(XY);
                                     nodes.at(i2).get_coords(x, y);
                                     
-                                    nodes.at(i2).set_coords(x,y+((sh/4)-(psh/4)));
+                                    nodes.at(i2).set_coords(x,y + (ideal-pideal));
                                     nodes.at(i2).set_canmove(res);
                                     shapes.at(i)->set_points( nodes);
                                 }
@@ -255,13 +261,7 @@ int main(int argc, char **argv){
                     }
                 }
 
-            }
-            canvas_y_coord = sh/4;
-            for (int i= 0; i <= gridsize;i++){
-                if ((canvas_y_coord + i) % gridsize == 0){
-                    ideal = canvas_y_coord + i;
-                }
-            }
+            } 
             SDL_DestroyTexture(gui);
             gui = SDL_CreateTexture(ctx, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, sw, ideal);
 

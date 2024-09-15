@@ -25,19 +25,26 @@
 mt_cad::Circle::Circle(std::vector<Node> nodes){
     this->max_nodes = 2;
     if (nodes.size()>=this->max_nodes){
-        this->nodes = nodes;
+        int x,y;
+        nodes.at(0).get_coords(x, y);
+
+        this->nodes = {nodes.at(0),nodes.at(1)};
     }else{
-        throw std::length_error("Too many nodes for a circle");
+        throw std::length_error("Too few nodes for a circle");
     }
 }
 std::vector<mt_cad::Node> mt_cad::Circle::get_points() {
 	return this->nodes;
 }
-void mt_cad::Circle::set_points(std::vector<Node> nodes) {
+void mt_cad::Circle::set_points(std::vector<mt_cad::Node> nodes) {
 	if (nodes.size()>=this->max_nodes){
+        int x,y;
+        nodes.at(0).get_coords(x, y);
+       
         this->nodes = {nodes.at(0),nodes.at(1)};
     }else{
-        throw std::length_error("Too many nodes for a circle");
+    SDL_Point prev = {0,0};
+        throw std::length_error("Too few nodes for a circle");
     }
 }
 void mt_cad::Circle::draw(SDL_Renderer *ctx)
