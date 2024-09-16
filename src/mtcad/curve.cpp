@@ -12,8 +12,8 @@
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
 #include <cmath>
-#include <curve.hpp>
-#include <Node.hpp>
+#include <mtcad/curve.hpp>
+#include <mtcad/Node.hpp>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <stdexcept>

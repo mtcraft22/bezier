@@ -1,4 +1,4 @@
-#include <button/Boton.hpp>
+#include <GUI/Boton.hpp>
 #include <SDL2/SDL_events.h>
 #include <chrono>
 #include <cstddef>

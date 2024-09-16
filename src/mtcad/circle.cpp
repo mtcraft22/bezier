@@ -12,10 +12,10 @@
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
 #include <SDL2/SDL.h>
-#include <circle.hpp>
+#include <mtcad/circle.hpp>
 #include <cmath>
 #include <cstdlib>
-#include <Node.hpp>
+#include <mtcad/Node.hpp>
 #include <iostream>
 #include <ostream>
 #include <stdexcept>

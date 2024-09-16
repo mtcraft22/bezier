@@ -11,10 +11,10 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
-#include "Node.hpp"
+#include <mtcad/Node.hpp>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
-#include <Triangle.hpp>
+#include <mtcad/Triangle.hpp>
 #include <stdexcept>
 #include <vector>
 
