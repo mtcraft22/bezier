@@ -13,12 +13,17 @@
 */
 #pragma once
 
-#include "Shape.hpp"
+#include <mtcad/Shape.hpp>
+#include <mtcad/Node.hpp>
 #include <SDL2/SDL_render.h>
-class Line : public mt_cad::Shape{
-    public:
-        void draw(SDL_Texture * txt) ;
-        bool hover(int x , int y) ;
-        std::vector<mt_cad::Node> get_points() ;
-        void set_points(std::vector<mt_cad::Node> nodes) ;
-};
+#include <vector>
+namespace mt_cad {
+    class Line : public mt_cad::Shape{
+        public:
+            Line(std::vector<mt_cad::Node> nodes);
+            void draw(SDL_Renderer * txt) ;
+            bool hover(int x , int y) ;
+            std::vector<mt_cad::Node> get_points() ;
+            void set_points(std::vector<mt_cad::Node> nodes) ;
+    };
+}

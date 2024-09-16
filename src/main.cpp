@@ -11,6 +11,7 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
+#include "mtcad/line.hpp"
 #include <mtcad/mtcad.hpp>
 #include <SDL2/SDL.h>
 
@@ -89,6 +90,8 @@ int main(int argc, char **argv){
     mt_cad::Triangle tri5 = mt_cad::Triangle(  nodes5  );
     std::vector<mt_cad::Node> nodes6 = {{100,100+ideal,XY},{140,100+ideal,XY},{100,140+ideal,XY}};
     mt_cad::Curve tri6 = mt_cad::Curve(  nodes6  );
+    std::vector<mt_cad::Node> nodes7 = {{300,300+ideal,XY},{200,200+ideal,XY}};
+    mt_cad::Line tri7 = mt_cad::Line(  nodes7 );
     //mt_cad::Curve Curv = mt_cad::Curve(  nodes  );
     int end,start = SDL_GetTicks(); 
     double delta = 0.0;
@@ -100,6 +103,7 @@ int main(int argc, char **argv){
     shapes.push_back(&tri3);
     shapes.push_back(&tri4);
     shapes.push_back(&tri5);
+     shapes.push_back(&tri7);
     
 
     SDL_Event e;
