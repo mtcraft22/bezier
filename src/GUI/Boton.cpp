@@ -7,7 +7,7 @@
 #include <string>
 #include <thread>
 #define default(x) this->x = x;
-Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext,std::string text,SDL_Event* e)
+GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext,std::string text,SDL_Event* e)
 {
 	this->text = text;
     this->el.e = *(e);
@@ -22,18 +22,18 @@ Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext
     this->stop = false;
 	SDL_Rect col = { x,y,10,10 };
 	this->box = &col;
-    this->hilo = std::thread(&Boton::check_status,this);
+    this->hilo = std::thread(&GUI::Boton::Boton::check_status,this);
 }
-    bool Boton::Is_hover(){
+    bool GUI::Boton::Boton::Is_hover(){
         return this->hover;
     }
-    bool Boton::Is_clicked(){
+    bool GUI::Boton::Boton::Is_clicked(){
         return this->pressed;
     }
-    void Boton::set_evento(SDL_Event *e){
+    void GUI::Boton::Boton::set_evento(SDL_Event *e){
         this->el.e = *(e);
     }
-    void Boton::check_status(){
+    void GUI::Boton::Boton::check_status(){
      
         while (!this->stop) {
             el.lock();
@@ -71,25 +71,25 @@ Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext
         }     
        
     }
-    void Boton::getGap(int* gapX, int* gapY)
+    void GUI::Boton::Boton::getGap(int* gapX, int* gapY)
     {
         *(gapX) = this->gapX;
         *(gapY) = this->gapY;
     }
 
-    void Boton::setGap(int gapX, int gapY)
+    void GUI::Boton::Boton::setGap(int gapX, int gapY)
     {
         this->gapX=gapX;
         this->gapY=gapY;
     }
 
-    void Boton::getPos(int* x, int* y)
+    void GUI::Boton::Boton::getPos(int* x, int* y)
     {
         *(x) = this->x;
         *(y) = this->y;
     }
 
-    void Boton::setPos(int x, int y)
+    void GUI::Boton::Boton::setPos(int x, int y)
     {
         this->x=x;
         this->y=y;
@@ -97,13 +97,13 @@ Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext
         this->box->y = y;
     }
 
-    void Boton::getColor(SDL_Color* color, SDL_Color* colortext)
+    void GUI::Boton::Boton::getColor(SDL_Color* color, SDL_Color* colortext)
     {
         *(color) = this->color;
         *(colortext) = this->colortext;
     }
 
-    void Boton::setColor(SDL_Color color, SDL_Color colortext)
+    void GUI::Boton::Boton::setColor(SDL_Color color, SDL_Color colortext)
     {
         this->color =color;
         this->colortext = colortext;
@@ -111,7 +111,7 @@ Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext
 
    
 
-    void Boton::render(SDL_Renderer* ctx, TTF_Font* font,SDL_Color * srccolor)
+    void GUI::Boton::Boton::render(SDL_Renderer* ctx, TTF_Font* font,SDL_Color * srccolor)
     {
         
         SDL_Color bg ={this->color.r,this->color.g,this->color.b,1};
@@ -133,7 +133,7 @@ Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext
         SDL_FreeSurface(txt);
         SDL_DestroyTexture(txt_text);
     }
-    Boton::~Boton(){
+    GUI::Boton::Boton::~Boton(){
         this->stop = true;
         this->hilo.join();
     }

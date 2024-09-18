@@ -11,10 +11,13 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
-#include "mtcad/line.hpp"
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_surface.h>
 #include <mtcad/mtcad.hpp>
+#include <GUI/ImageButton.hpp>
 #include <SDL2/SDL.h>
-
+#include <SDL2/SDL_image.h>
 #include <cmath>
 #include <cstddef>
 #include <iostream>
@@ -65,6 +68,10 @@ int main(int argc, char **argv){
     Uint32 * pixels;
     int pitch;
     
+    SDL_Surface* line = IMG_Load("./res/buttons/line.png");
+    SDL_Texture* linetext = SDL_CreateTextureFromSurface(ctx, line);
+    SDL_FreeSurface(line);
+    SDL_Color c = {2,2,2,2};
    
     render_grid(sw, sh, canvas);
     
@@ -116,7 +123,7 @@ int main(int argc, char **argv){
     int sel = 0;
     int selnode = 0;
    
-            
+    GUI::ImageButton linebuton = GUI::ImageButton(linetext,10,10,c,c,"",&e);      
 	while (run) {
         
         start = SDL_GetTicks();
@@ -152,7 +159,9 @@ int main(int argc, char **argv){
             }
             SDL_SetRenderDrawColor(ctx,255, 0, 0, 255);
             //Curv.draw(ctx);
+            
             while (SDL_PollEvent(&e)) {
+                linebuton.set_evento(&e);
                 if (e.type == SDL_QUIT) {
                     run = false;
                 }
@@ -274,7 +283,9 @@ int main(int argc, char **argv){
             }
             SDL_UnlockTexture(gui);
             SDL_RenderCopy(ctx, gui, NULL, &dest2);
+            linebuton.render(ctx);
             SDL_RenderPresent(ctx);
+            
             
         }else{
             SDL_Delay(ticksframe -delta);
@@ -283,6 +294,7 @@ int main(int argc, char **argv){
     }
     SDL_DestroyTexture(canvas);
     SDL_DestroyTexture(gui);
+    SDL_DestroyTexture(linetext);
     SDL_DestroyRenderer(ctx);
     SDL_Quit();
     return 0;
