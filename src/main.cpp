@@ -67,10 +67,12 @@ int main(int argc, char **argv){
     SDL_Texture * gui = SDL_CreateTexture(ctx,SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING,sw, ideal);
     Uint32 * pixels;
     int pitch;
-    
-    SDL_Surface* line = IMG_Load("./res/buttons/line.png");
-    SDL_Texture* linetext = SDL_CreateTextureFromSurface(ctx, line);
-    SDL_FreeSurface(line);
+
+	SDL_Texture* linetext =  IMG_LoadTexture(ctx,"./res/buttons/line.png");
+	std::cout << IMG_GetError();
+	exit(-1);
+
+
     SDL_Color c = {2,2,2,2};
    
     render_grid(sw, sh, canvas);
@@ -239,6 +241,7 @@ int main(int argc, char **argv){
                                             
                                             nodes.at(i).set_coords(x + e.motion.xrel,y + e.motion.yrel);
                                             shapes.at(sel)->set_points( nodes);
+                                            
                                         }
                                     }
                                     break;
@@ -296,6 +299,7 @@ int main(int argc, char **argv){
     SDL_DestroyTexture(gui);
     SDL_DestroyTexture(linetext);
     SDL_DestroyRenderer(ctx);
+
     SDL_Quit();
     return 0;
 }

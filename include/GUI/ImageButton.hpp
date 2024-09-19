@@ -14,11 +14,7 @@ namespace GUI {
                 SDL_Color colortext, 
                 std::string text, 
                 SDL_Event *e
-            ):img(img),GUI::Boton(
-                x,y, 0, 0, 
-                color, colortext, "", 
-                e
-            ){}
+            );
             
             void render(SDL_Renderer* ctx);
     };
