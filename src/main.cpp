@@ -11,6 +11,7 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
+#include <SDL2/SDL_filesystem.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
@@ -22,11 +23,15 @@
 #include <cstddef>
 #include <iostream>
 #include <ostream>
+#include <string>
 #include <vector>
 
 int gridsize = 20 ;
 const int ticksframe = 1000/60;
 int canvas_y_coord = 0;
+void h(){
+    std::cout << "hover" << std::endl;
+}
 void render_grid(int sw,int sh,SDL_Texture *  canvas){
         Uint32 * pixels;
         int pitch;
@@ -67,10 +72,10 @@ int main(int argc, char **argv){
     SDL_Texture * gui = SDL_CreateTexture(ctx,SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING,sw, ideal);
     Uint32 * pixels;
     int pitch;
+    std::string path = std::string(SDL_GetBasePath()) + "line.png";
+	SDL_Texture* linetext =  IMG_LoadTexture(ctx,path.c_str());
+    std::cout << path << std::endl;
 
-	SDL_Texture* linetext =  IMG_LoadTexture(ctx,"./res/buttons/line.png");
-	std::cout << IMG_GetError();
-	exit(-1);
 
 
     SDL_Color c = {2,2,2,2};
@@ -125,7 +130,8 @@ int main(int argc, char **argv){
     int sel = 0;
     int selnode = 0;
    
-    GUI::ImageButton linebuton = GUI::ImageButton(linetext,10,10,c,c,"",&e);      
+    GUI::ImageButton linebuton = GUI::ImageButton(linetext,10,10,c,c,"",&e);
+    linebuton.on_hover = h;
 	while (run) {
         
         start = SDL_GetTicks();

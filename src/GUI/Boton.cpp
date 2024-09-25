@@ -22,7 +22,10 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
     this->stop = false;
 	SDL_Rect col = { x,y,10,10 };
 	this->box = &col;
-    this->hilo = std::thread(&GUI::Boton::Boton::check_status,this);
+    
+    this->on_click = NULL;
+    this->on_hover = NULL;
+    this->on_hover_release = NULL;
 }
     bool GUI::Boton::Boton::Is_hover(){
         return this->hover;
@@ -35,7 +38,7 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
     }
     void GUI::Boton::Boton::check_status(){
      
-        while (!this->stop) {
+      
             el.lock();
             bool prev = this->hover;
             this->hover = false;
@@ -48,13 +51,11 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
             }
             if (prev && !hover){
                 if(this->on_hover_release){
-                    std::cout << "hover_release" << std::endl;
                     this->on_hover_release();
                 }
             }else{
                 if(this->hover && !this->pressed){
                     if (this->on_hover){
-                        std::cout << "hover" << std::endl;
                         this->on_hover();
                     }
                 }
@@ -70,7 +71,7 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
             std::this_thread::sleep_for( dura );
         }     
        
-    }
+    
     void GUI::Boton::Boton::getGap(int* gapX, int* gapY)
     {
         *(gapX) = this->gapX;

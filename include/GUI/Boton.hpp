@@ -11,21 +11,24 @@ typedef struct event_listener:public std::mutex{
 }Event_listener;
 namespace GUI {
 	class Boton{
-		private:
+			
+		protected:
 			std::mutex state;
 			Event_listener el;
-			std::thread hilo;
+			
 			int w,h;
 			int gapX, gapY;
 			SDL_Rect* box;
 			SDL_Color color;
 			SDL_Color colortext;
-			std::atomic<bool> stop;
+			
 			bool pressed, hover;
 			std::string text;
-			void check_status();
-		protected:
+		
 			int x, y;
+			std::thread hilo;
+			void check_status();
+			std::atomic<bool> stop;
 		public:
 			void (*on_hover)(void);
 			void (*on_click)(void);

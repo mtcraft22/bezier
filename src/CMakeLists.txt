@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.26.4)
-set(CMAKE_CXX_COMPILER "/usr/bin/g++-12")
 project(Bezier DESCRIPTION "cad app" LANGUAGES CXX)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
