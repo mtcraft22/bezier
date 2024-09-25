@@ -10,7 +10,7 @@
 GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext,std::string text,SDL_Event* e)
 {
 	this->text = text;
-    this->el.e = *(e);
+    this->e = e;
 	this->x = x;
 	this->y = y;
 	this->w = 0;
@@ -19,7 +19,6 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
 	this->colortext = colortext;
 	this->gapX = gapX;
 	this->gapY = gapY;
-    this->stop = false;
 	SDL_Rect col = { x,y,10,10 };
 	this->box = &col;
     
@@ -34,20 +33,21 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
         return this->pressed;
     }
     void GUI::Boton::Boton::set_evento(SDL_Event *e){
-        this->el.e = *(e);
+        this->e = e;
+        this->check_status();
     }
     void GUI::Boton::Boton::check_status(){
      
-      
-            el.lock();
+            
+         
             bool prev = this->hover;
             this->hover = false;
             this->pressed = false;
-            this->hover = (this->el.e.motion.x > this->x && x < this->x + (this->w + (this->gapX*2))) && (this->el.e.motion.y > this->y && this->el.e.motion.y < this->y + (this->h + (this->gapY*2)));
+            this->hover = (this->e->motion.x > this->x && x < this->x + (this->w + (this->gapX*2))) && (this->e->motion.y > this->y && this->e->motion.y < this->y + (this->h + (this->gapY*2)));
          
             
-            if (this->el.e.type == SDL_MOUSEBUTTONDOWN){
-                    this->pressed = this->hover && this->el.e.button.button == SDL_BUTTON_LEFT ;
+            if (this->e->type == SDL_MOUSEBUTTONDOWN){
+                    this->pressed = this->hover && this->e->button.button == SDL_BUTTON_LEFT ;
             }
             if (prev && !hover){
                 if(this->on_hover_release){
@@ -62,13 +62,12 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
             }
             
             if(this->pressed){
-                if (this->on_click){
+                if (this->on_click != NULL){
                     this->on_click();
                 }
             }
-            el.unlock();
-            std::chrono::milliseconds dura( 50 );
-            std::this_thread::sleep_for( dura );
+           
+          
         }     
        
     
@@ -134,7 +133,4 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
         SDL_FreeSurface(txt);
         SDL_DestroyTexture(txt_text);
     }
-    GUI::Boton::Boton::~Boton(){
-        this->stop = true;
-        this->hilo.join();
-    }
+    
