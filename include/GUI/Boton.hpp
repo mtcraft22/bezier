@@ -11,7 +11,7 @@ namespace GUI {
 			
 		protected:
 			
-			SDL_Event *e;
+			SDL_Event e;
 			int w,h;
 			int gapX, gapY;
 			SDL_Rect* box;

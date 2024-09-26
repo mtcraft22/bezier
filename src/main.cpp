@@ -11,6 +11,7 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
+#include "GUI/Boton.hpp"
 #include <SDL2/SDL_filesystem.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
@@ -29,8 +30,8 @@
 int gridsize = 20 ;
 const int ticksframe = 1000/60;
 int canvas_y_coord = 0;
-void h(){
-    std::cout << "hover" << std::endl;
+void h(GUI::Boton * target,void* userdata){
+    
 }
 void render_grid(int sw,int sh,SDL_Texture *  canvas){
         Uint32 * pixels;
