@@ -23,7 +23,9 @@ namespace GUI {
 			void check_status();
 			
 		public:
-			void (*on_hover)(void);
+			template<typename t>
+    		void set_hover_callback(void (*callback )(GUI::Boton * target, t userdata),t param);
+			void (*on_hover)(GUI::Boton * target, t userdata);
 			void (*on_click)(void);
 			void (*on_hover_release)(void);
 			Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext,std::string text,SDL_Event* e);

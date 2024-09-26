@@ -26,7 +26,11 @@ GUI::Boton::Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colo
     this->on_hover = NULL;
     this->on_hover_release = NULL;
 }
-    bool GUI::Boton::Boton::Is_hover(){
+    template<typename t>
+    void GUI:: Boton::set_hover_callback(void (*callback )(GUI::Boton * target, t userdata),t param){
+        this->hover = callback;
+    }
+    bool GUI::Boton::Is_hover(){
         return this->hover;
     }
     bool GUI::Boton::Boton::Is_clicked(){
