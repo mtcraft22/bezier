@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 namespace GUI {
+    
     class ImageButton : public GUI::Boton{
         private:
             SDL_Texture * img;

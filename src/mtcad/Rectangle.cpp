@@ -23,7 +23,6 @@
 #include <vector>
 
 mt_cad::Rectangle::Rectangle(std::vector<mt_cad::Node> nodes){
-    this->max_nodes = 2;
     
     if (nodes.size() == 2){
         int x2,y2,x1,y1;

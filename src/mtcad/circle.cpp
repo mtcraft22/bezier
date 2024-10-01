@@ -23,7 +23,7 @@
 
 
 mt_cad::Circle::Circle(std::vector<Node> nodes){
-    this->max_nodes = 2;
+
     if (nodes.size()>=this->max_nodes){
         int x,y;
         nodes.at(0).get_coords(x, y);

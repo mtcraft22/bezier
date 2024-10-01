@@ -25,5 +25,7 @@ namespace mt_cad {
             bool hover(int x , int y) ;
             std::vector<mt_cad::Node> get_points() ;
             void set_points(std::vector<mt_cad::Node> nodes) ;
+            static const int max_nodes;
+            static const std::string material;
     };
 }

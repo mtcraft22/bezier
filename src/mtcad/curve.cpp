@@ -20,7 +20,7 @@
 #include <vector>
 
 mt_cad::Curve::Curve(std::vector<mt_cad::Node> points  ){
-    this->max_nodes = 3;
+
     if (points.size()>=this->max_nodes){
         int x0,y0,x1,y1,x2,y2;
         points.at(0).get_coords(x0,y0);

@@ -19,7 +19,6 @@
 #include <vector>
 
 mt_cad::Triangle::Triangle(std::vector<mt_cad::Node> nodes){
-    this->max_nodes = 3;
     if (nodes.size()>=this->max_nodes){
         int x0,y0,x1,y1,x2,y2;
         nodes.at(0).get_coords(x0,y0);
@@ -48,7 +47,6 @@ bool mt_cad::Triangle::hover(int px , int py){
 }
 std::vector<mt_cad::Node> mt_cad::Triangle::get_points(){return this->nodes;}
 void mt_cad::Triangle::set_points(std::vector<mt_cad::Node> nodes){
-   this->max_nodes = 3;
     if (nodes.size()>=this->max_nodes){
         int x0,y0,x1,y1,x2,y2;
         nodes.at(1).get_coords(x0,y0);

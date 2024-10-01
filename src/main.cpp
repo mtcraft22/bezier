@@ -12,10 +12,16 @@
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
 #include "GUI/Boton.hpp"
+#include "mtcad/Node.hpp"
+#include "mtcad/Shape.hpp"
+#include "mtcad/line.hpp"
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_filesystem.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_video.h>
+#include <cstdlib>
 #include <mtcad/mtcad.hpp>
 #include <GUI/ImageButton.hpp>
 #include <SDL2/SDL.h>
@@ -30,7 +36,11 @@
 int gridsize = 20 ;
 const int ticksframe = 1000/60;
 int canvas_y_coord = 0;
-void h(GUI::Boton * target,void* userdata){
+struct data{
+    SDL_Window * window;
+    std::vector<mt_cad::Shape *> * shapes;
+};
+void click_linebutton(GUI::Boton * target,void * userdata){
     
 }
 void render_grid(int sw,int sh,SDL_Texture *  canvas){
@@ -52,6 +62,7 @@ void render_grid(int sw,int sh,SDL_Texture *  canvas){
         SDL_UnlockTexture(canvas);
     }
 int main(int argc, char **argv){
+
     if(SDL_Init(SDL_INIT_EVERYTHING)<0){
         std::cout << SDL_GetError() << std::endl;
         return -1;
@@ -98,15 +109,15 @@ int main(int argc, char **argv){
         SDL_UnlockTexture(gui);
    
     std::vector<mt_cad::Node> nodes3 = {{50,60+ideal,XY},{100,60+ideal,XY}};
-    mt_cad::Circle tri3 = mt_cad::Circle(  nodes3  );
+    mt_cad::Circle *tri3 = new mt_cad::Circle(  nodes3  );
     std::vector<mt_cad::Node> nodes4 = {{400,400+ideal,XY},{440,440+ideal,XY}};
-    mt_cad::Rectangle tri4 = mt_cad::Rectangle(  nodes4  );
+    mt_cad::Rectangle *tri4 = new mt_cad::Rectangle(  nodes4  );
     std::vector<mt_cad::Node> nodes5 = {{500,500+ideal,XY},{540,500+ideal,XY},{500,540+ideal,XY}};
-    mt_cad::Triangle tri5 = mt_cad::Triangle(  nodes5  );
+    mt_cad::Triangle *tri5 = new mt_cad::Triangle(  nodes5  );
     std::vector<mt_cad::Node> nodes6 = {{100,100+ideal,XY},{140,100+ideal,XY},{100,140+ideal,XY}};
-    mt_cad::Curve tri6 = mt_cad::Curve(  nodes6  );
+    mt_cad::Curve *tri6 = new mt_cad::Curve(  nodes6  );
     std::vector<mt_cad::Node> nodes7 = {{300,300+ideal,XY},{200,200+ideal,XY}};
-    mt_cad::Line tri7 = mt_cad::Line(  nodes7 );
+    mt_cad::Line *tri7 = new mt_cad::Line(  nodes7 );
     //mt_cad::Curve Curv = mt_cad::Curve(  nodes  );
     int end,start = SDL_GetTicks(); 
     double delta = 0.0;
@@ -114,16 +125,16 @@ int main(int argc, char **argv){
 
     std::vector<mt_cad::Shape *> shapes;
 
-    shapes.push_back(&tri6);
-    shapes.push_back(&tri3);
-    shapes.push_back(&tri4);
-    shapes.push_back(&tri5);
-     shapes.push_back(&tri7);
+    shapes.push_back(tri6);
+    shapes.push_back(tri3);
+    shapes.push_back(tri4);
+    shapes.push_back(tri5);
+    shapes.push_back(tri7);
     
 
     SDL_Event e;
     
-    bool draging = false;
+    bool draggin = false;
     bool innode = false;
     
     int mx,my = 0;
@@ -132,7 +143,8 @@ int main(int argc, char **argv){
     int selnode = 0;
    
     GUI::ImageButton linebuton = GUI::ImageButton(linetext,10,10,c,c,"",&e);
-    linebuton.on_hover = h;
+    struct data  dt = {.window=window,.shapes=&shapes};
+    linebuton.set_click_callback(click_linebutton, (void *)&dt);
 	while (run) {
         
         start = SDL_GetTicks();
@@ -160,7 +172,7 @@ int main(int argc, char **argv){
             for (int i = 0; i< shapes.at(sel)->get_points().size(); i++){
                 SDL_SetRenderDrawColor(ctx, 255, 0, 0,255);
                 shapes.at(sel)->get_points().at(i).draw(ctx);
-                if(draging && shapes.at(sel)->get_points().at(i).hover(mx, my) ){
+                if(draggin && shapes.at(sel)->get_points().at(i).hover(mx, my) ){
                     
                     shapes.at(sel)->get_points().at(i).set_coords(gridsize*(mx/gridsize), gridsize*(my/gridsize));
                 }
@@ -211,7 +223,7 @@ int main(int argc, char **argv){
                 }
                 if(e.type == SDL_MOUSEBUTTONDOWN){
                     
-                    if(!draging){
+                    if(!draggin){
                         for ( int x = 0; x < shapes.size(); x++ ){
                             if (shapes.at(x)->hover(mx, my)){
                                 sel = x;
@@ -219,10 +231,10 @@ int main(int argc, char **argv){
                             }
                         }       
                     }
-                    draging = true;
+                    draggin = true;
                 }
                 if(e.type == SDL_MOUSEBUTTONUP){
-                    draging = false;
+                    draggin = false;
                     innode = false;
                      
                 }
@@ -231,10 +243,10 @@ int main(int argc, char **argv){
                     mx = e.motion.x;
                     my = e.motion.y;
                     
-                    if (draging ){
+                    if (draggin ){
                         if (!innode){
                             for (int i = 0; i< shapes.at(sel)->get_points().size(); i++){
-                                if(draging && shapes.at(sel)->get_points().at(i).hover(mx, my) ){
+                                if(draggin && shapes.at(sel)->get_points().at(i).hover(mx, my) ){
                                     std::vector<mt_cad::Node> nodes = shapes.at(sel)->get_points();
                                     nodes.at(i).set_coords(gridsize * (std::trunc(mx/gridsize)),(gridsize * (std::trunc(my/gridsize))));
                                     shapes.at(sel)->set_points( nodes);
@@ -254,7 +266,7 @@ int main(int argc, char **argv){
                                     break;
                             }
                         }
-                        }else if (draging) {
+                        }else if (draggin) {
                             std::vector<mt_cad::Node> nodes = shapes.at(sel)->get_points();
                             nodes.at(selnode).set_coords(gridsize * (std::trunc(mx/gridsize)),(gridsize * (std::trunc(my/gridsize))));
 
@@ -306,7 +318,10 @@ int main(int argc, char **argv){
     SDL_DestroyTexture(gui);
     SDL_DestroyTexture(linetext);
     SDL_DestroyRenderer(ctx);
-
+    for (auto &s  : shapes){
+        delete s;
+    }
+    shapes.clear();
     SDL_Quit();
     return 0;
 }

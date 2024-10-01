@@ -6,7 +6,7 @@ GUI::ImageButton::ImageButton(SDL_Texture *img, int x, int y, SDL_Color color, S
 	SDL_Event *e):GUI::Boton(x,y,0,0,color,colortext,"",e),img(img) {
 
 		SDL_QueryTexture(img,NULL,NULL,&this->w,&this->h);
-        std::cout << this->w << " " << this->h << std::endl;
+        this->gapX = this->gapY = 0;
 }
 void GUI::ImageButton::render(SDL_Renderer * ctx){
     int w,h;

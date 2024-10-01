@@ -7,8 +7,8 @@
 #include <string>
 #include <thread>
 namespace GUI {
+	
 	class Boton{
-			
 		protected:
 			
 			SDL_Event e;
@@ -21,13 +21,19 @@ namespace GUI {
 			std::string text;
 			int x, y;
 			void check_status();
+			void * hoverCallbackUserParams;
+			void * clickCallbackUserParams;
+			void * hoverReleaseCallbackUserParams;
+
+			void (*on_hover)(GUI::Boton * target, void *userdata);
+			void (*on_click)(GUI::Boton * target, void *userdata);
+			void (*on_hover_release)(GUI::Boton * target, void *userdata);
 			
 		public:
-			template<typename t>
-    		void set_hover_callback(void (*callback )(GUI::Boton * target, t userdata),t param);
-			void (*on_hover)(GUI::Boton * target, t userdata);
-			void (*on_click)(void);
-			void (*on_hover_release)(void);
+			void set_hover_callback(void (*callback )(GUI::Boton * target, void * userdata),void * param);
+			void set_hover_release_callback(void (*callback )(GUI::Boton * target, void *userdata),void *param);
+			void set_click_callback(void (*callback )(GUI::Boton * target, void *userdata),void *param);
+			
 			Boton(int x,int y,int gapX,int gapY, SDL_Color color, SDL_Color colortext,std::string text,SDL_Event* e);
 			void set_evento(SDL_Event* e);
 			void getGap(int* gapX, int* gapY);

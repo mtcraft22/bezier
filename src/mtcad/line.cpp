@@ -17,7 +17,6 @@
 #include <stdexcept>
 #include <vector>
 mt_cad::Line::Line(std::vector<mt_cad::Node> nodes){
-    this->max_nodes = 2;
     if (nodes.size() >= this->max_nodes){
         int x0,y0,x1,y1;
         nodes.at(0).get_coords(x0,y0);
@@ -67,12 +66,13 @@ void mt_cad::Line::draw (SDL_Renderer * ctx){
 	this->nodes.at(1).get_coords(x0,y0);
 	this->nodes.at(2).get_coords(x1,y1);
     SDL_RenderDrawLine(ctx, x0, y0, x1, y1);
+   
 }
 bool mt_cad::Line::hover(int x, int y){
 	int x1,y1,x2,y2;
 	this->nodes.at(1).get_coords(x1,y1);
 	this->nodes.at(2).get_coords(x2,y2);
-    SDL_Rect rect = {x1,y1,x2-x1,y2-y1};
+   
 
     if (x2 < x1){
         int x3 = x1;
@@ -85,5 +85,6 @@ bool mt_cad::Line::hover(int x, int y){
         y1 = y2;
         y2 = y3;
     }
-    return (x > x1 && x < x2) && (y > y1 && y < y2) ;
+    SDL_Rect rect = {x1-5,y1-5,(x2-x1)+10,(y2-y1)+10};
+    return (x > rect.x && x < rect.x+rect.w) && (y > rect.y && y < rect.y+rect.h) ;
 }
