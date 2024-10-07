@@ -3,6 +3,7 @@
 #include <chrono>
 #include <cstddef>
 #include <iostream>
+#include <iterator>
 #include <ostream>
 #include <string>
 #include <thread>
@@ -64,8 +65,8 @@ void GUI::Boton::set_click_callback(void (*callback )(GUI::Boton * target, void 
             bool prev = this->hover;
             this->hover = false;
             this->pressed = false;
-            this->hover = (this->e.motion.x > this->x && x < this->x + (this->w + (this->gapX*2))) && (this->e.motion.y > this->y && this->e.motion.y < this->y + (this->h + (this->gapY*2)));
-            //TODO: Remove cout std::cout << this->e.motion.x << " " << this->e.motion.y << std::endl;
+            this->hover = (this->e.motion.x > this->x && this->e.motion.x < this->x + (this->w + (this->gapX*2))) && (this->e.motion.y > this->y && this->e.motion.y < this->y + (this->h + (this->gapY*2)));
+          
             
             if (this->e.type == SDL_MOUSEBUTTONDOWN){
                     this->pressed = this->hover && this->e.button.button == SDL_BUTTON_LEFT ;

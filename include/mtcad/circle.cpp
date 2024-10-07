@@ -11,14 +11,11 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
-#include <mtcad/Shape.hpp>
-#include <SDL2/SDL.h>
-#include <mtcad/Node.hpp>
-#include <vector>
 #pragma once
+#include <mtcad/Shape.hpp>
 namespace mt_cad{
     
-	class Circle: public Shape{
+    class Circle: public Shape{
 		public:
 			Circle(std::vector<mt_cad::Node> nodes);
 			void draw(SDL_Renderer * ctx) ;

@@ -1,2 +1,2 @@
 CompileFlags:                    
-  Add: [-I./include,-I../include,-I../../include]   
+  Add: [-I./include,-I../include,-I../../include,-std=c++20]   

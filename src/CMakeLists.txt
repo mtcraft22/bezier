@@ -3,7 +3,9 @@ project(Bezier DESCRIPTION "cad app" LANGUAGES CXX)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 add_executable(${PROJECT_NAME}
+    ${PROJECT_SOURCE_DIR}/Bezier.cpp
     ${PROJECT_SOURCE_DIR}/main.cpp
+    ${PROJECT_SOURCE_DIR}/SDL_app.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../include)
 target_link_libraries(${PROJECT_NAME} PUBLIC SDL2 )

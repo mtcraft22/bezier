@@ -11,64 +11,23 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
-#include "GUI/Boton.hpp"
-#include "mtcad/Node.hpp"
-#include "mtcad/Shape.hpp"
-#include "mtcad/line.hpp"
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_filesystem.h>
-#include <SDL2/SDL_pixels.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_surface.h>
-#include <SDL2/SDL_video.h>
+
 #include <cstdlib>
 #include <mtcad/mtcad.hpp>
 #include <GUI/ImageButton.hpp>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <cmath>
-#include <cstddef>
 #include <iostream>
-#include <ostream>
 #include <string>
 #include <vector>
-
 int gridsize = 20 ;
 const int ticksframe = 1000/60;
 int canvas_y_coord = 0;
-struct data{
-    SDL_Window * window;
-    std::vector<mt_cad::Shape *> * shapes;
-};
-void click_linebutton(GUI::Boton * target,void * userdata){
-    
-}
-void render_grid(int sw,int sh,SDL_Texture *  canvas){
-        Uint32 * pixels;
-        int pitch;
-        SDL_LockTexture(canvas, NULL, (void **)&pixels, &pitch);
-        for (int y = 0; y<sh; y++){
-            for (int x = 0; x<sw; x++) {
-        
-                if (!(x%gridsize) && !(y%gridsize)){
-                   
-                    pixels[y*sw+x] = 0xffffff0f;
-                }else{
-                    pixels[y*sw+x] = 0x0000180f;
-                }
-                
-            }
-        }
-        SDL_UnlockTexture(canvas);
-    }
+
 int main(int argc, char **argv){
 
-    if(SDL_Init(SDL_INIT_EVERYTHING)<0){
-        std::cout << SDL_GetError() << std::endl;
-        return -1;
-    }
-    SDL_Window * window = SDL_CreateWindow("curbas", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE);
-    SDL_Renderer * ctx = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
+   
     int psw , psh;
     int sw,sh;
 
@@ -82,15 +41,10 @@ int main(int argc, char **argv){
         }
     }
     SDL_Texture * gui = SDL_CreateTexture(ctx,SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING,sw, ideal);
-    Uint32 * pixels;
-    int pitch;
-    std::string path = std::string(SDL_GetBasePath()) + "line.png";
-	SDL_Texture* linetext =  IMG_LoadTexture(ctx,path.c_str());
-    std::cout << path << std::endl;
+   
 
 
 
-    SDL_Color c = {2,2,2,2};
    
     render_grid(sw, sh, canvas);
     
@@ -108,16 +62,6 @@ int main(int argc, char **argv){
         }
         SDL_UnlockTexture(gui);
    
-    std::vector<mt_cad::Node> nodes3 = {{50,60+ideal,XY},{100,60+ideal,XY}};
-    mt_cad::Circle *tri3 = new mt_cad::Circle(  nodes3  );
-    std::vector<mt_cad::Node> nodes4 = {{400,400+ideal,XY},{440,440+ideal,XY}};
-    mt_cad::Rectangle *tri4 = new mt_cad::Rectangle(  nodes4  );
-    std::vector<mt_cad::Node> nodes5 = {{500,500+ideal,XY},{540,500+ideal,XY},{500,540+ideal,XY}};
-    mt_cad::Triangle *tri5 = new mt_cad::Triangle(  nodes5  );
-    std::vector<mt_cad::Node> nodes6 = {{100,100+ideal,XY},{140,100+ideal,XY},{100,140+ideal,XY}};
-    mt_cad::Curve *tri6 = new mt_cad::Curve(  nodes6  );
-    std::vector<mt_cad::Node> nodes7 = {{300,300+ideal,XY},{200,200+ideal,XY}};
-    mt_cad::Line *tri7 = new mt_cad::Line(  nodes7 );
     //mt_cad::Curve Curv = mt_cad::Curve(  nodes  );
     int end,start = SDL_GetTicks(); 
     double delta = 0.0;
@@ -125,26 +69,20 @@ int main(int argc, char **argv){
 
     std::vector<mt_cad::Shape *> shapes;
 
-    shapes.push_back(tri6);
-    shapes.push_back(tri3);
-    shapes.push_back(tri4);
-    shapes.push_back(tri5);
-    shapes.push_back(tri7);
     
 
     SDL_Event e;
     
     bool draggin = false;
     bool innode = false;
-    
+    bool creating = false;
+    std::string material = "";
     int mx,my = 0;
 
     int sel = 0;
     int selnode = 0;
-   
-    GUI::ImageButton linebuton = GUI::ImageButton(linetext,10,10,c,c,"",&e);
-    struct data  dt = {.window=window,.shapes=&shapes};
-    linebuton.set_click_callback(click_linebutton, (void *)&dt);
+
+    
 	while (run) {
         
         start = SDL_GetTicks();
@@ -164,7 +102,7 @@ int main(int argc, char **argv){
 
            
             
-    
+            if (shapes.size() > 0){
             for ( int i = 0; i < shapes.size(); i++ ){
                 
                 shapes.at(i)->draw(ctx);
@@ -180,9 +118,9 @@ int main(int argc, char **argv){
             }
             SDL_SetRenderDrawColor(ctx,255, 0, 0, 255);
             //Curv.draw(ctx);
-            
+            }
             while (SDL_PollEvent(&e)) {
-                linebuton.set_evento(&e);
+                
                 if (e.type == SDL_QUIT) {
                     run = false;
                 }
@@ -198,31 +136,32 @@ int main(int argc, char **argv){
 
                         render_grid(sw, sh, canvas);
                         canvas_y_coord = sh/4;
-                        for (int i= 0; i <= gridsize;i++){
-                            if ((canvas_y_coord + i) % gridsize == 0){
-                                ideal = canvas_y_coord + i;
-                            }
-                        }
-                        for ( int i = 0; i < shapes.size(); i++ ){
-                           for (int i2 = 0; i2< shapes.at(i)->get_points().size(); i2++){
-                                    std::vector<mt_cad::Node> nodes = shapes.at(i)->get_points();
-                                    int x,y ;
-                                    Restictions res =  nodes.at(i2).get_canmove();
-                                    nodes.at(i2).set_canmove(XY);
-                                    nodes.at(i2).get_coords(x, y);
-                                    
-                                    nodes.at(i2).set_coords(x,y + (ideal-pideal));
-                                    nodes.at(i2).set_canmove(res);
-                                    shapes.at(i)->set_points( nodes);
+                        if (shapes.size() > 0){
+                            for (int i= 0; i <= gridsize;i++){
+                                if ((canvas_y_coord + i) % gridsize == 0){
+                                    ideal = canvas_y_coord + i;
                                 }
                             }
+                            for ( int i = 0; i < shapes.size(); i++ ){
+                            for (int i2 = 0; i2< shapes.at(i)->get_points().size(); i2++){
+                                        std::vector<mt_cad::Node> nodes = shapes.at(i)->get_points();
+                                        int x,y ;
+                                        Restictions res =  nodes.at(i2).get_canmove();
+                                        nodes.at(i2).set_canmove(XY);
+                                        nodes.at(i2).get_coords(x, y);
+                                        
+                                        nodes.at(i2).set_coords(x,y + (ideal-pideal));
+                                        nodes.at(i2).set_canmove(res);
+                                        shapes.at(i)->set_points( nodes);
+                                    }
+                                }
                         
-                       
+                        }
                     }
                     
                 }
                 if(e.type == SDL_MOUSEBUTTONDOWN){
-                    
+                    if (shapes.size() > 0){
                     if(!draggin){
                         for ( int x = 0; x < shapes.size(); x++ ){
                             if (shapes.at(x)->hover(mx, my)){
@@ -231,7 +170,7 @@ int main(int argc, char **argv){
                             }
                         }       
                     }
-                    draggin = true;
+                    draggin = true;}
                 }
                 if(e.type == SDL_MOUSEBUTTONUP){
                     draggin = false;
@@ -245,6 +184,7 @@ int main(int argc, char **argv){
                     
                     if (draggin ){
                         if (!innode){
+                            if (shapes.size() > 0){
                             for (int i = 0; i< shapes.at(sel)->get_points().size(); i++){
                                 if(draggin && shapes.at(sel)->get_points().at(i).hover(mx, my) ){
                                     std::vector<mt_cad::Node> nodes = shapes.at(sel)->get_points();
@@ -264,13 +204,14 @@ int main(int argc, char **argv){
                                         }
                                     }
                                     break;
-                            }
+                            }}
                         }
                         }else if (draggin) {
-                            std::vector<mt_cad::Node> nodes = shapes.at(sel)->get_points();
-                            nodes.at(selnode).set_coords(gridsize * (std::trunc(mx/gridsize)),(gridsize * (std::trunc(my/gridsize))));
+                            if (shapes.size() > 0){
+                                std::vector<mt_cad::Node> nodes = shapes.at(sel)->get_points();
+                                nodes.at(selnode).set_coords(gridsize * (std::trunc(mx/gridsize)),(gridsize * (std::trunc(my/gridsize))));
 
-                            shapes.at(sel)->set_points( nodes);
+                                shapes.at(sel)->set_points( nodes);
                                 if (selnode == 0){
                                     for (int i = 1; i< shapes.at(sel)->get_points().size(); i++){
                                         std::vector<mt_cad::Node> nodes = shapes.at(sel)->get_points();
@@ -280,6 +221,8 @@ int main(int argc, char **argv){
                                         shapes.at(sel)->set_points( nodes);
                                     }
                                 }
+                            }
+                            
                         }
                         
                       
@@ -305,7 +248,7 @@ int main(int argc, char **argv){
             }
             SDL_UnlockTexture(gui);
             SDL_RenderCopy(ctx, gui, NULL, &dest2);
-            linebuton.render(ctx);
+            
             SDL_RenderPresent(ctx);
             
             
@@ -316,7 +259,6 @@ int main(int argc, char **argv){
     }
     SDL_DestroyTexture(canvas);
     SDL_DestroyTexture(gui);
-    SDL_DestroyTexture(linetext);
     SDL_DestroyRenderer(ctx);
     for (auto &s  : shapes){
         delete s;

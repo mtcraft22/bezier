@@ -11,31 +11,22 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
-#include <mtcad/Shape.hpp>
-#include <SDL2/SDL.h>
-#include <mtcad/Node.hpp>
-#include <string>
-#include <vector>
+
 #pragma once
 
-namespace mt_cad {
-    class Curve: public mt_cad::Shape {
-        
+#include <SDL2/SDL.h>
+namespace App {
+    class SDL_app {
         public:
-            
-            Curve (std::vector<mt_cad::Node> points );
-            void draw(SDL_Renderer * ctx) ;
-            bool hover(int x , int y) ;
-            std::vector<mt_cad::Node> get_points() ;
-            void set_points(std::vector<mt_cad::Node> nodes) ;
-            static const int max_nodes;
-            static const std::string material;
+            SDL_app();
+            SDL_Window* get_window();
+            SDL_Renderer* get_ctx();
+            int get_maxFrames();
+            void set_maxFrames();
+            ~SDL_app();
         private:
-            
-            bool triPoint(float x1, float y1, float x2, float y2, float x3, float y3,
-            float px, float py);
-      
-          
+            SDL_Window * window;
+            SDL_Renderer  * ctx;
+            int max_frames;
     };
-    
 } ;
