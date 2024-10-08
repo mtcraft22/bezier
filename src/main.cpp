@@ -104,7 +104,7 @@ int main(int argc, char **argv){
                 }
                 if(e.type == SDL_MOUSEBUTTONDOWN){
                     if (shapes.size() > 0){
-                    if((bezier.get_drawing_state() & DRAGGIN) != DRAGGIN){
+                    if(!(bezier.get_drawing_state() & DRAGGIN)){
                         for ( int x = 0; x < shapes.size(); x++ ){
                             if (shapes.at(x)->hover(mx, my)){
                                 sel = x;
