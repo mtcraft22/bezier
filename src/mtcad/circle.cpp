@@ -16,12 +16,11 @@
 #include <cmath>
 #include <cstdlib>
 #include <mtcad/Node.hpp>
-#include <iostream>
-#include <ostream>
 #include <stdexcept>
 #include <vector>
 
-
+const mt_cad::Materials_t mt_cad::Circle::material = mt_cad::materials::CIRCLE;
+const int mt_cad::Circle::max_nodes = 2;
 mt_cad::Circle::Circle(std::vector<Node> nodes){
 
     if (nodes.size()>=this->max_nodes){

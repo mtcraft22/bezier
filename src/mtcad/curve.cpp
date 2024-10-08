@@ -11,16 +11,17 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
+#include "mtcad/curve.hpp"
+#include "mtcad/materials.hpp"
 #include <cmath>
-#include <mtcad/curve.hpp>
-#include <mtcad/Node.hpp>
-#include <SDL2/SDL_rect.h>
-#include <SDL2/SDL_render.h>
+#include <mtcad/mtcad.hpp>
+#include <SDL2/SDL.h>
 #include <stdexcept>
 #include <vector>
 
+const mt_cad::Materials_t mt_cad::Curve::material = mt_cad::materials::CURVE;
+const int mt_cad::Curve::max_nodes = 3;
 mt_cad::Curve::Curve(std::vector<mt_cad::Node> points  ){
-
     if (points.size()>=this->max_nodes){
         int x0,y0,x1,y1,x2,y2;
         points.at(0).get_coords(x0,y0);

@@ -17,34 +17,43 @@
 #include "SDL_app.hpp"
 #include "mtcad/Shape.hpp"
 #include <vector>
+#include <mtcad/materials.hpp>
 #define IDDLE = 0b0001;
 #define DRAGGIN = 0b1000;
 #define INNODE = 0b0100;
 #define CREATING  = 0b0010;
+
+
 namespace App {
     class Bezier {
         private:
-            std::vector<mt_cad::Shape> shapes;
+            std::vector<mt_cad::Shape *> shapes;
             std::vector<GUI::ImageButton> shape_creation_buttons;
             SDL_Texture * gui;
             SDL_Texture * canvas;
             int drawing_state;
             int sel;
             int gridsize;
+            int canvas_y_coord;
+            int ideal;
+            mt_cad::Materials_t material;
             SDL_app application;
         public:
-            Bezier();
-            void render_grid(int sw,int sh);
+            Bezier(SDL_app app);
+            void render_grid();
+            int get_ideal_y_canvas_cord();
+            void render_gui();
             int get_gridsize() ;
-            std::vector<mt_cad::Shape> get_shapes() ;
+            std::vector<mt_cad::Shape *> get_shapes() ;
             std::vector<GUI::ImageButton> get_shape_creation_buttons() ;
             SDL_Texture* get_gui() ;
             SDL_Texture* get_canvas() ;
             int get_drawing_state() ;
             int get_sel() ;
+            SDL_Renderer * get_ctx();
 
             void set_gridsize(int gridsize);
-            void set_shapes(std::vector<mt_cad::Shape> shapes);
+            void set_shapes(std::vector<mt_cad::Shape *> shapes);
             void set_shape_creation_buttons(std::vector<GUI::ImageButton> shape_creation_buttons);
             void set_gui(SDL_Texture* gui);
             void set_canvas(SDL_Texture* canvas);

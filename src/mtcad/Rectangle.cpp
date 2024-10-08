@@ -11,17 +11,17 @@
     See the GNU General Public License for more details.
     You should have received a copy of the GNU General Public License along with Bezier. If not, see <https://www.gnu.org/licenses/>. 
 */
+
 #include <mtcad/Node.hpp>
 #include <mtcad/Shape.hpp>
 #include <SDL2/SDL_rect.h>
 #include <mtcad/Rectangle.hpp>
 #include <SDL2/SDL_render.h>
 #include <cstdlib>
-#include <iostream>
-#include <ostream>
 #include <stdexcept>
 #include <vector>
-
+const mt_cad::Materials_t mt_cad::Rectangle::material = mt_cad::materials::RECTANGLE;
+const int mt_cad::Rectangle::max_nodes = 2;
 mt_cad::Rectangle::Rectangle(std::vector<mt_cad::Node> nodes){
     
     if (nodes.size() == 2){

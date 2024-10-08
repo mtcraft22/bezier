@@ -16,6 +16,8 @@
 #include <mtcad/line.hpp>
 #include <stdexcept>
 #include <vector>
+const mt_cad::Materials_t mt_cad::Line::material = mt_cad::materials::LINE;
+const int mt_cad::Line::max_nodes = 2;
 mt_cad::Line::Line(std::vector<mt_cad::Node> nodes){
     if (nodes.size() >= this->max_nodes){
         int x0,y0,x1,y1;

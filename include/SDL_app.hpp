@@ -22,11 +22,14 @@ namespace App {
             SDL_Window* get_window();
             SDL_Renderer* get_ctx();
             int get_maxFrames();
-            void set_maxFrames();
+            void get_windowSize(int &w , int &h);
+            void set_maxFrames(int frames);
             ~SDL_app();
         private:
             SDL_Window * window;
             SDL_Renderer  * ctx;
-            int max_frames;
+            int frames;
+            int framerateTiming;
+            
     };
 } ;
